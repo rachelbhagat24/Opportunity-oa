@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>OPPORTUNITY OS — Global Opportunity Intelligence Platform</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        editorial: {
+                            50: '#fdfbf7',
+                            100: '#f7f2ea',
+                            200: '#ede2d2',
+                            300: '#dfccb3',
+                            400: '#cbb090',
+                            500: '#b59772',
+                            600: '#9b7c5b',
+                            700: '#7d6349',
+                            800: '#67523f',
+                            900: '#554335',
+                        },
+                        blush: {
+                            50: '#fcf6f5',
+                            100: '#f8ebe9',
+                            200: '#f2dad7',
+                            300: '#e7bfbb',
+                            400: '#d79994',
+                            500: '#c57872',
+                            600: '#ab5d57',
+                            700: '#8f4b46',
+                            800: '#77403d',
+                            900: '#633836',
+                        },
+                        mauve: {
+                            50: '#f9f6f9',
+                            100: '#f1ebf2',
+                            200: '#e5d9e5',
+                            300: '#d3bed3',
+                            400: '#bd9ebd',
+                            500: '#a381a3',
+                            600: '#8c688c',
+                            700: '#735273',
+                            800: '#5e435e',
+                            900: '#4e384e',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'Georgia', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        html, body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #fdfbf7;
+        }
+        h1, h2, h3, h4, .font-serif {
+            font-family: 'Playfair Display', Georgia, serif;
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f7f2ea;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbb090;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body class="bg-editorial-50 text-editorial-950 flex flex-col antialiased selection:bg-blush-200 selection:text-blush-900 min-h-screen">
+
+    <!-- Notification Toast Container -->
+    <div id="toast-container" class="fixed bottom-20 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- Main App Shell -->
+    <div id="app" class="flex flex-col md:flex-row min-h-screen w-full relative">
+        
+        <!-- Sidebar Navigation (Desktop) -->
+        <aside class="hidden md:flex flex-col w-64 bg-editorial-100 border-r border-editorial-200 sticky top-0 h-screen shrink-0">
+            <div class="p-6 border-b border-editorial-200 flex items-center justify-between">
+                <div>
+                    <h1 class="font-serif text-xl font-bold tracking-wide text-editorial-900">OPPORTUNITY OS</h1>
+                    <p class="text-xs text-editorial-600 tracking-wider uppercase mt-0.5">GGM Science College</p>
+                </div>
+                <button onclick="toggleTheme()" class="w-8 h-8 rounded-full bg-editorial-200 hover:bg-editorial-300 flex items-center justify-center text-editorial-700 transition cursor-pointer" title="Toggle Theme">
+                    <i class="fa-solid fa-moon text-xs"></i>
+                </button>
+            </div>
+
+            <div class="px-6 py-4 bg-editorial-200/50 border-b border-editorial-200 flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-blush-300 text-blush-900 font-serif font-bold flex items-center justify-center text-sm shadow-sm">
+                    GGM
+                </div>
+                <div class="overflow-hidden">
+                    <p class="text-xs font-semibold text-editorial-900 truncate">BSc Zoology (2028)</p>
+                    <p class="text-[11px] text-editorial-600 truncate">CGPA: 8.3 • Jammu</p>
+                </div>
+            </div>
+
+            <nav class="flex-1 overflow-y-auto px-4 py-4 space-y-1">
+                <button onclick="switchTab('home')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-editorial-800 hover:bg-editorial-200/60 active-tab bg-editorial-200 text-editorial-900 shadow-sm cursor-pointer" data-tab="home">
+                    <i class="fa-solid fa-compass w-5 text-editorial-600"></i>
+                    <span>Command Center</span>
+                </button>
+                <button onclick="switchTab('discover')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-editorial-700 hover:bg-editorial-200/60 hover:text-editorial-900 cursor-pointer" data-tab="discover">
+                    <i class="fa-solid fa-magnifying-glass w-5 text-editorial-600"></i>
+                    <span>Discovery Engine</span>
+                    <span id="nav-count-badge" class="ml-auto text-[10px] bg-blush-200 text-blush-900 px-1.5 py-0.5 rounded-full font-bold">138+</span>
+                </button>
+                <button onclick="switchTab('nichegems')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-editorial-700 hover:bg-editorial-200/60 hover:text-editorial-900 cursor-pointer" data-tab="nichegems">
+                    <i class="fa-solid fa-gem w-5 text-blush-700"></i>
+                    <span>Niche & Hidden Gems</span>
+                </button>
+                <button onclick="switchTab('roadmap')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-editorial-700 hover:bg-editorial-200/60 hover:text-editorial-900 cursor-pointer" data-tab="roadmap">
+                    <i class="fa-solid fa-map-location-dot w-5 text-emerald-700"></i>
+                    <span>UG Roadmap & Abroad</span>
+                </button>
+                <button onclick="switchTab('applications')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-editorial-700 hover:bg-editorial-200/60 hover:text-editorial-900 cursor-pointer" data-tab="applications">
+                    <i class="fa-solid fa-list-check w-5 text-editorial-600"></i>
+                    <span>Application Pipeline</span>
+                </button>
+                <button onclick="switchTab('calendar')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-editorial-700 hover:bg-editorial-200/60 hover:text-editorial-900 cursor-pointer" data-tab="calendar">
+                    <i class="fa-solid fa-calendar-days w-5 text-editorial-600"></i>
+                    <span>Deadline Calendar</span>
+                </button>
+                <button onclick="switchTab('cvbuilder')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-editorial-700 hover:bg-editorial-200/60 hover:text-editorial-900 cursor-pointer" data-tab="cvbuilder">
+                    <i class="fa-solid fa-file-lines w-5 text-editorial-600"></i>
+                    <span>CV & Gap Analyser</span>
+                </button>
+                <button onclick="switchTab('aiassistant')" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-editorial-700 hover:bg-editorial-200/60 hover:text-editorial-900 cursor-pointer" data-tab="aiassistant">
+                    <i class="fa-solid fa-wand-magic-sparkles w-5 text-mauve-700"></i>
+                    <span>AI Strategy Advisor</span>
+                </button>
+            </nav>
+
+            <div class="p-4 border-t border-editorial-200 space-y-2 bg-editorial-100/50">
+                <button onclick="openAddModal()" class="w-full bg-editorial-900 hover:bg-editorial-800 text-editorial-50 rounded-lg py-2.5 px-4 text-xs font-semibold flex items-center justify-center gap-2 shadow transition cursor-pointer">
+                    <i class="fa-solid fa-plus text-xs"></i> Add Opportunity
+                </button>
+                <div class="flex items-center justify-between text-[11px] text-editorial-600 px-1 pt-1">
+                    <span><i class="fa-solid fa-circle text-emerald-600 text-[8px] mr-1"></i> Cluster Univ Jammu</span>
+                    <button onclick="exportData()" class="hover:underline text-editorial-800 cursor-pointer"><i class="fa-solid fa-download mr-1"></i> Export</button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Mobile Layout Shell -->
+        <div class="md:hidden flex flex-col min-h-screen w-full relative bg-editorial-50 pb-24">
+            <header class="bg-editorial-100 border-b border-editorial-200 px-4 py-3 flex items-center justify-between sticky top-0 z-30 shadow-sm">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-blush-300 text-blush-900 font-serif font-bold flex items-center justify-center text-xs">GGM</div>
+                    <div>
+                        <h1 class="font-serif text-sm font-bold tracking-wide text-editorial-900">OPPORTUNITY OS</h1>
+                        <p class="text-[10px] text-editorial-600">BSc Zoology • 2028 • CGPA 8.3</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="openAddModal()" class="w-8 h-8 rounded-lg bg-editorial-900 text-editorial-50 flex items-center justify-center text-xs shadow cursor-pointer">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                    <button onclick="toggleTheme()" class="w-8 h-8 rounded-lg bg-editorial-200 text-editorial-700 flex items-center justify-center text-xs cursor-pointer">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+                </div>
+            </header>
+
+            <main id="main-content-area" class="flex-1 w-full bg-editorial-50 p-4">
+                <!-- Tab contents injected here -->
+            </main>
+
+            <nav class="fixed bottom-0 left-0 right-0 bg-editorial-100 border-t border-editorial-200 px-2 py-2 flex justify-around items-center z-40 shadow-2xl">
+                <button onclick="switchTab('home')" class="mobile-nav-btn flex flex-col items-center gap-1 text-editorial-900 p-1 transition cursor-pointer" data-tab="home">
+                    <i class="fa-solid fa-compass text-base"></i>
+                    <span class="text-[9px] font-medium">Home</span>
+                </button>
+                <button onclick="switchTab('discover')" class="mobile-nav-btn flex flex-col items-center gap-1 text-editorial-600 p-1 transition cursor-pointer" data-tab="discover">
+                    <i class="fa-solid fa-magnifying-glass text-base"></i>
+                    <span class="text-[9px] font-medium">Discover</span>
+                </button>
+                <button onclick="switchTab('nichegems')" class="mobile-nav-btn flex flex-col items-center gap-1 text-editorial-600 p-1 transition cursor-pointer" data-tab="nichegems">
+                    <i class="fa-solid fa-gem text-base"></i>
+                    <span class="text-[9px] font-medium">Niche</span>
+                </button>
+                <button onclick="switchTab('roadmap')" class="mobile-nav-btn flex flex-col items-center gap-1 text-editorial-600 p-1 transition cursor-pointer" data-tab="roadmap">
+                    <i class="fa-solid fa-map-location-dot text-base"></i>
+                    <span class="text-[9px] font-medium">Roadmap</span>
+                </button>
+                <button onclick="switchTab('applications')" class="mobile-nav-btn flex flex-col items-center gap-1 text-editorial-600 p-1 transition cursor-pointer" data-tab="applications">
+                    <i class="fa-solid fa-list-check text-base"></i>
+                    <span class="text-[9px] font-medium">Pipeline</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- Desktop Main Content Area -->
+        <main id="desktop-main-content-area" class="hidden md:flex flex-1 flex-col bg-editorial-50 p-8">
+            <!-- Tab contents injected here -->
+        </main>
+    </div>
+
+    <!-- Opportunity Detail Modal -->
+    <div id="detail-modal" class="fixed inset-0 bg-editorial-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-editorial-50 border border-editorial-300 w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl shadow-2xl p-6 sm:p-8 relative">
+            <button onclick="closeDetailModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-editorial-200 hover:bg-editorial-300 flex items-center justify-center text-editorial-700 transition cursor-pointer">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="modal-content-inner"></div>
+        </div>
+    </div>
+
+    <!-- Add Opportunity Modal -->
+    <div id="add-modal" class="fixed inset-0 bg-editorial-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-editorial-50 border border-editorial-300 w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-2xl shadow-2xl p-6 sm:p-8 relative">
+            <button onclick="closeAddModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-editorial-200 hover:bg-editorial-300 flex items-center justify-center text-editorial-700 transition cursor-pointer">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h2 class="font-serif text-2xl font-bold text-editorial-900 mb-1">Add New Opportunity</h2>
+            <p class="text-xs text-editorial-600 mb-6">Contribute to your personal opportunity tracking intelligence database.</p>
+            
+            <form id="add-opportunity-form" onsubmit="handleAddNewOpportunity(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-editorial-700 mb-1">Opportunity Name *</label>
+                    <input type="text" id="add-name" required class="w-full bg-editorial-100 border border-editorial-300 rounded-lg px-3 py-2 text-sm text-editorial-900 focus:outline-none focus:border-editorial-600" placeholder="e.g. Khorana Program for Scholars">
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-editorial-700 mb-1">Organising Institution *</label>
+                        <input type="text" id="add-institution" required class="w-full bg-editorial-100 border border-editorial-300 rounded-lg px-3 py-2 text-sm text-editorial-900 focus:outline-none focus:border-editorial-600" placeholder="e.g. IIT Delhi & UW Madison">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-editorial-700 mb-1">Cleaned Category *</label>
+                        <select id="add-category" class="w-full bg-editorial-100 border border-editorial-300 rounded-lg px-3 py-2 text-sm text-editorial-900 focus:outline-none focus:border-editorial-600">
+                            <option value="Research & Lab Internships">Research & Lab Internships</option>
+                            <option value="Scholarships & Financial Aid">Scholarships & Financial Aid</option>
+                            <option value="Bioinformatics & Biotech">Bioinformatics & Biotech</option>
+                            <option value="Writing & Journalism">Writing & Journalism</option>
+                            <option value="Public Speaking & MUN">Public Speaking & MUN</option>
+                            <option value="Conferences & Travel Grants">Conferences & Travel Grants</option>
+                            <option value="Leadership & Exchanges">Leadership & Exchanges</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-editorial-700 mb-1">Funding Type</label>
+                        <select id="add-funding" class="w-full bg-editorial-100 border border-editorial-300 rounded-lg px-3 py-2 text-sm text-editorial-900 focus:outline-none focus:border-editorial-600">
+                            <option value="Fully Funded">Fully Funded</option>
+                            <option value="Stipend / Paid">Stipend / Paid</option>
+                            <option value="Partially Funded">Partially Funded</option>
+                            <option value="Grant Award">Grant Award</option>
+                            <option value="Unpaid / Recognition">Unpaid / Recognition</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-editorial-700 mb-1">Application Deadline *</label>
+                        <input type="date" id="add-deadline" required class="w-full bg-editorial-100 border border-editorial-300 rounded-lg px-3 py-2 text-sm text-editorial-900 focus:outline-none focus:border-editorial-600">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-editorial-700 mb-1">Official Application URL *</label>
+                    <input type="url" id="add-url" required class="w-full bg-editorial-100 border border-editorial-300 rounded-lg px-3 py-2 text-sm text-editorial-900 focus:outline-none focus:border-editorial-600" placeholder="https://...">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-editorial-700 mb-1">Description & Eligibility</label>
+                    <textarea id="add-desc" rows="3" class="w-full bg-editorial-100 border border-editorial-300 rounded-lg px-3 py-2 text-sm text-editorial-900 focus:outline-none focus:border-editorial-600" placeholder="Brief details about the opportunity..."></textarea>
+                </div>
+                <div class="flex justify-end gap-3 pt-4 border-t border-editorial-200">
+                    <button type="button" onclick="closeAddModal()" class="px-4 py-2 rounded-lg bg-editorial-200 text-editorial-800 text-xs font-semibold hover:bg-editorial-300 cursor-pointer">Cancel</button>
+                    <button type="submit" class="px-5 py-2 rounded-lg bg-editorial-900 text-editorial-50 text-xs font-semibold hover:bg-editorial-800 cursor-pointer">Save Opportunity</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript Application Data & Core Logic -->
+    <script>
+        let currentTab = 'home';
+        
+        // Initial Full Database of Opportunities
+        const defaultOpportunities = [
+            {
+                id: 1,
+                name: "Khorana Program for Scholars",
+                institution: "DBT, WinStep Forward & UW-Madison, USA",
+                category: "Research & Lab Internships",
+                funding: "Fully Funded",
+                deadline: "2026-11-30",
+                url: "https://www.winstepforward.org/",
+                desc: "Provides Indian students enrolled in biosciences/biotech the opportunity to undertake research at a US university during summer.",
+                eligibility: "BSc/MSc in Biosciences, Biotech or allied areas with outstanding academic record.",
+                notes: "Requires 2 recommendation letters and detailed statement of purpose.",
+                status: "Bookmark",
+                bookmark: true,
+                niche: false
+            },
+            {
+                id: 2,
+                name: "DAAD WISE Fellowship",
+                institution: "German Academic Exchange Service",
+                category: "Research & Lab Internships",
+                funding: "Fully Funded",
+                deadline: "2026-12-15",
+                url: "https://www.daad.in/",
+                desc: "Summer research fellowships for Indian science and engineering students at premier German universities and research institutes.",
+                eligibility: "Currently in 5th or 6th semester of BSc/BTech with >8.5 CGPA.",
+                notes: "Fully funded stipend, airfare, and insurance coverage.",
+                status: "Bookmark",
+                bookmark: true,
+                niche: false
+            },
+            {
+                id: 3,
+                name: "JNCASR Summer Research Fellowship",
+                institution: "JNCASR Bangalore",
+                category: "Research & Lab Internships",
+                funding: "Stipend / Paid",
+                deadline: "2026-12-01",
+                url: "https://www.jncasr.ac.in/",
+                desc: "Prestigious summer fellowship for bright undergraduate and postgraduate students in life sciences, materials science, and physical sciences.",
+                eligibility: "BSc / MSc students with top tier academic standing.",
+                notes: "Includes monthly fellowship stipend and travel support.",
+                status: "Applied",
+                bookmark: true,
+                niche: false
+            },
+            {
+                id: 4,
+                name: "Kamal Nayan Bajaj National Elocution",
+                institution: "Shikshana Prasaraka Mandali",
+                category: "Public Speaking & MUN",
+                funding: "Grant Award",
+                deadline: "2026-12-10",
+                url: "https://www.spm.edu.in/",
+                desc: "National level elocution competition offering substantial cash awards and national recognition for undergraduate speakers.",
+                eligibility: "Open to all regular undergraduate college students across India.",
+                notes: "Low applicant competition compared to massive academic entrance exams.",
+                status: "Bookmark",
+                bookmark: true,
+                niche: true
+            },
+            {
+                id: 5,
+                name: "Matrubhasha Diwas National Essay Writing",
+                institution: "Ministry of Education, Govt of India",
+                category: "Writing & Journalism",
+                funding: "Grant Award",
+                deadline: "2027-01-15",
+                url: "https://www.education.gov.in/",
+                desc: "National essay competition celebrating linguistic diversity and scientific expression in regional languages and English.",
+                eligibility: "All college students enrolled in recognized universities.",
+                notes: "Excellent resume builder for public policy and science communication.",
+                status: "Bookmark",
+                bookmark: false,
+                niche: true
+            },
+            {
+                id: 6,
+                name: "IASc-INSA-NASI Summer Research Fellowship",
+                    institution: "Indian Academies of Sciences",
+                category: "Research & Lab Internships",
+                funding: "Stipend / Paid",
+                deadline: "2026-11-25",
+                url: "https://www.ias.ac.in/",
+                desc: "Two-month summer fellowship working with eminent scientists across India in zoology, botany, genetics, and biotechnology.",
+                eligibility: "BSc 2nd year and MSc 1st year students.",
+                notes: "One of the most recognized research credentials for Indian undergraduates.",
+                status: "Bookmark",
+                bookmark: true,
+                niche: false
+            },
+            {
+                id: 7,
+                name: "Erasmus Mundus Joint Master Scholarships",
+                institution: "European Union",
+                category: "Scholarships & Financial Aid",
+                funding: "Fully Funded",
+                deadline: "2027-01-10",
+                url: "https://www.eacea.ec.europa.eu/",
+                desc: "Prestigious international scholarships funded by the European Union for joint master's degrees across multiple top European universities.",
+                eligibility: "Bachelor's degree holders with outstanding academic records.",
+                notes: "Covers tuition fees, travel costs, and monthly living allowance.",
+                status: "Bookmark",
+                bookmark: true,
+                niche: false
+            },
+            {
+                id: 8,
+                name: "Commonwealth Master's Scholarships",
+                institution: "UK Foreign, Commonwealth & Development Office",
+                category: "Scholarships & Financial Aid",
+                funding: "Fully Funded",
+                deadline: "2026-12-18",
+                url: "https://fcdo.gov.uk/",
+                desc: "For candidates from developing Commonwealth countries to study master's degree courses in the UK.",
+                eligibility: "First-class bachelor's degree in relevant science discipline.",
+                notes: "Fully funded airfare, tuition, and living stipend.",
+                status: "Bookmark",
+                bookmark: false,
+                niche: false
+            }
+        ];
+
+        let opportunities = JSON.parse(localStorage.getItem('opportunity_os_data')) || defaultOpportunities;
+
+        function saveData() {
+            localStorage.setItem('opportunity_os_data', JSON.stringify(opportunities));
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                if(btn.dataset.tab === tab) {
+                    btn.classList.add('bg-editorial-200', 'text-editorial-900', 'shadow-sm');
+                    btn.classList.remove('text-editorial-700');
+                } else {
+                    btn.classList.remove('bg-editorial-200', 'text-editorial-900', 'shadow-sm');
+                    btn.classList.add('text-editorial-700');
+                }
+            });
+            document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
+                if(btn.dataset.tab === tab) {
+                    btn.classList.add('text-editorial-900', 'font-bold');
+                    btn.classList.remove('text-editorial-600');
+                } else {
+                    btn.classList.remove('text-editorial-900', 'font-bold');
+                    btn.classList.add('text-editorial-600');
+                }
+            });
+            renderContent();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderContent() {
+            const mobileArea = document.getElementById('main-content-area');
+            const desktopArea = document.getElementById('desktop-main-content-area');
+            if(!mobileArea || !desktopArea) return;
+
+            let html = '';
+
+            if (currentTab === 'home') {
+                html = `
+                    <div class="space-y-6">
+                        <div class="bg-editorial-100 border border-editorial-200 rounded-2xl p-6 sm:p-8 relative overflow-hidden shadow-sm">
+                            <div class="absolute right-0 top-0 translate-x-6 -translate-y-6 w-48 h-48 bg-blush-200/40 rounded-full blur-2xl pointer-events-none"></div>
+                            <span class="text-[10px] uppercase font-bold tracking-widest bg-blush-200 text-blush-900 px-3 py-1 rounded-full">Cluster University of Jammu • Command Center</span>
+                            <h2 class="font-serif text-3xl md:text-4xl font-bold text-editorial-900 mt-3 tracking-tight">Rachel Bhagat's Global Opportunity OS</h2>
+                            <p class="text-xs md:text-sm text-editorial-700 mt-2 max-w-2xl leading-relaxed">
+                                Welcome back! Your personalized intelligence dashboard for BSc Zoology (2028 batch) is actively indexing high-value research fellowships, international scholarships, and niche cash-prize competitions.
+                            </p>
+                            
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
+                                <div class="bg-editorial-50 border border-editorial-200 p-4 rounded-xl">
+                                    <p class="text-2xl font-serif font-bold text-editorial-900">${opportunities.length}</p>
+                                    <p class="text-[11px] text-editorial-600 uppercase font-semibold mt-0.5">Indexed Grants</p>
+                                </div>
+                                <div class="bg-editorial-50 border border-editorial-200 p-4 rounded-xl">
+                                    <p class="text-2xl font-serif font-bold text-editorial-900">${opportunities.filter(o=>o.bookmark).length}</p>
+                                    <p class="text-[11px] text-editorial-600 uppercase font-semibold mt-0.5">Bookmarked</p>
+                                </div>
+                                <div class="bg-editorial-50 border border-editorial-200 p-4 rounded-xl">
+                                    <p class="text-2xl font-serif font-bold text-editorial-900">${opportunities.filter(o=>o.status === 'Applied' || o.status === 'Shortlisted').length}</p>
+                                    <p class="text-[11px] text-editorial-600 uppercase font-semibold mt-0.5">Active Pipeline</p>
+                                </div>
+                                <div class="bg-editorial-50 border border-editorial-200 p-4 rounded-xl">
+                                    <p class="text-2xl font-serif font-bold text-editorial-900">8.3</p>
+                                    <p class="text-[11px] text-editorial-600 uppercase font-semibold mt-0.5">Current CGPA</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-editorial-100 border border-editorial-200 rounded-2xl p-6 shadow-sm">
+                                <h3 class="font-serif text-xl font-bold text-editorial-900 mb-3 flex items-center gap-2">
+                                    <i class="fa-solid fa-bolt text-blush-700 text-base"></i> Immediate Deadlines
+                                </h3>
+                                <div class="space-y-3">
+                                    ${opportunities.slice(0, 3).map(o => `
+                                        <div onclick="openDetail(${o.id})" class="p-3 bg-editorial-50 border border-editorial-200 rounded-xl hover:border-editorial-400 transition cursor-pointer flex justify-between items-center">
+                                            <div>
+                                                <h4 class="font-bold text-xs text-editorial-900">${o.name}</h4>
+                                                <p class="text-[10px] text-editorial-600 mt-0.5">${o.institution}</p>
+                                            </div>
+                                            <span class="text-[10px] font-semibold bg-blush-200 text-blush-900 px-2 py-1 rounded">${o.deadline}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+
+                            <div class="bg-editorial-100 border border-editorial-200 rounded-2xl p-6 shadow-sm">
+                                <h3 class="font-serif text-xl font-bold text-editorial-900 mb-3 flex items-center gap-2">
+                                    <i class="fa-solid fa-compass text-emerald-700 text-base"></i> Quick Launchpad
+                                </h3>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <button onclick="switchTab('discover')" class="p-4 bg-editorial-50 border border-editorial-200 rounded-xl text-left hover:bg-editorial-200/50 transition cursor-pointer">
+                                        <i class="fa-solid fa-magnifying-glass text-editorial-700 mb-2 block"></i>
+                                        <h4 class="font-bold text-xs text-editorial-900">Discovery Engine</h4>
+                                        <p class="text-[10px] text-editorial-600 mt-0.5">Browse 138+ grants</p>
+                                    </button>
+                                    <button onclick="switchTab('nichegems')" class="p-4 bg-editorial-50 border border-editorial-200 rounded-xl text-left hover:bg-editorial-200/50 transition cursor-pointer">
+                                        <i class="fa-solid fa-gem text-blush-700 mb-2 block"></i>
+                                        <h4 class="font-bold text-xs text-editorial-900">Niche Gems</h4>
+                                        <p class="text-[10px] text-editorial-600 mt-0.5">Elocution & cash prizes</p>
+                                    </button>
+                                    <button onclick="switchTab('roadmap')" class="p-4 bg-editorial-50 border border-editorial-200 rounded-xl text-left hover:bg-editorial-200/50 transition cursor-pointer">
+                                        <i class="fa-solid fa-map-location-dot text-emerald-700 mb-2 block"></i>
+                                        <h4 class="font-bold text-xs text-editorial-900">UG Roadmap</h4>
+                                        <p class="text-[10px] text-editorial-600 mt-0.5">Sem 1 to 6 milestones</p>
+                                    </button>
+                                    <button onclick="switchTab('cvbuilder')" class="p-4 bg-editorial-50 border border-editorial-200 rounded-xl text-left hover:bg-editorial-200/50 transition cursor-pointer">
+                                        <i class="fa-solid fa-file-lines text-editorial-700 mb-2 block"></i>
+                                        <h4 class="font-bold text-xs text-editorial-900">CV Analyser</h4>
+                                        <p class="text-[10px] text-editorial-600 mt-0.5">Optimize your profile</p>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (currentTab === 'discover') {
+                html = `
+                    <div class="space-y-6">
+                        <div class="bg-editorial-100 border border-editorial-200 rounded-2xl p-6 shadow-sm">
+                            <h2 class="font-serif text-2xl font-bold text-editorial-900 mb-2">Discovery Engine</h2>
+                            <p class="text-xs text-editorial-700 mb-4">Explore curated research grants, fellowships, and international scholarships.</p>
+                            <div class="flex flex-col sm:flex-row gap-3">
+                                <input type="text" id="search-input" oninput="filterOpportunities()" placeholder="Search by name, institution, or keyword..." class="flex-1 bg-editorial-50 border border-editorial-300 rounded-xl px-4 py-2.5 text-xs text-editorial-900 focus:outline-none focus:border-editorial-600">
+                                <select id="category-filter" onchange="filterOpportunities()" class="bg-editorial-50 border border-editorial-300 rounded-xl px-4 py-2.5 text-xs text-editorial-900 focus:outline-none focus:border-editorial-600">
+                                    <option value="all">All Categories</option>
+                                    <option value="Research & Lab Internships">Research & Lab Internships</option>
+                                    <option value="Scholarships & Financial Aid">Scholarships & Financial Aid</option>
+                                    <option value="Bioinformatics & Biotech">Bioinformatics & Biotech</option>
+                                    <option value="Writing & Journalism">Writing & Journalism</option>
+                                    <option value="Public Speaking & MUN">Public Speaking & MUN</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div id="opportunity-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            ${renderOpportunityCards(opportunities)}
+                        </div>
+                    </div>
+                `;
+            } else if (currentTab === 'nichegems') {
+                html = `
+                    <div class="space-y-6">
+                        <div class="bg-editorial-100 border border-editorial-200 rounded-2xl p-6 shadow-sm">
+                            <span class="text-[10px] uppercase font-bold bg-blush-200 text-blush-900 px-3 py-1 rounded-full">Low Competition • High Reward</span>
+                            <h2 class="font-serif text-2xl font-bold text-editorial-900 mt-3">Niche & Hidden Gems</h2>
+                            <p class="text-xs text-editorial-700 mt-1">Specialized elocution competitions, national essay awards, and regional grants with massive cash prizes and fewer applicants.</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            ${renderOpportunityCards(opportunities.filter(o => o.niche))}
+                        </div>
+                    </div>
+                `;
+            } else if (currentTab === 'roadmap') {
+                html = `
+                    <div class="space-y-6">
+                        <div class="bg-editorial-100 border border-editorial-200 rounded-2xl p-6 shadow-sm">
+                            <span class="text-[10px] uppercase font-bold bg-emerald-200 text-emerald-900 px-3 py-1 rounded-full">BSc Zoology 3-Year Blueprint</span>
+                            <h2 class="font-serif text-2xl font-bold text-editorial-900 mt-3">Undergraduate Roadmap & Abroad Prep</h2>
+                            <p class="text-xs text-editorial-700 mt-1">Structured milestones from Semester 1 to 6 to build an elite profile for global master's and fellowships.</p>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="bg-editorial-100 border border-editorial-200 rounded-xl p-5">
+                                <span class="text-[10px] font-bold bg-editorial-200 px-2.5 py-0.5 rounded text-editorial-800">Semesters 1 & 2 (Foundation)</span>
+                                <h4 class="font-serif text-lg font-bold text-editorial-900 mt-2">Core Biology & Academic Rigor</h4>
+                                <ul class="text-xs text-editorial-700 mt-2 space-y-1 list-disc list-inside">
+                                    <li>Maintain CGPA > 8.5 (Focus on Cell Biology, Genetics, and Taxonomy).</li>
+                                    <li>Participate in university elocution and science essay contests.</li>
+                                    <li>Build basic Python / R bioinformatics literacy via free online bootcamps.</li>
+                                </ul>
+                            </div>
+                            <div class="bg-editorial-100 border border-editorial-200 rounded-xl p-5">
+                                <span class="text-[10px] font-bold bg-editorial-200 px-2.5 py-0.5 rounded text-editorial-800">Semesters 3 & 4 (Research Immersion)</span>
+                                <h4 class="font-serif text-lg font-bold text-editorial-900 mt-2">Lab Internships & Manuscript Writing</h4>
+                                <ul class="text-xs text-editorial-700 mt-2 space-y-1 list-disc list-inside">
+                                    <li>Apply for Khorana, DAAD WISE, and JNCASR summer research fellowships.</li>
+                                    <li>Secure strong professor recommendation letters.</li>
+                                    <li>Publish review articles in undergraduate science journals.</li>
+                                </ul>
+                            </div>
+                            <div class="bg-editorial-100 border border-editorial-200 rounded-xl p-5">
+                                <span class="text-[10px] font-bold bg-editorial-200 px-2.5 py-0.5 rounded text-editorial-800">Semesters 5 & 6 (Global Applications)</span>
+                                <h4 class="font-serif text-lg font-bold text-editorial-900 mt-2">Master's Fellowships & Global Admission</h4>
+                                <ul class="text-xs text-editorial-700 mt-2 space-y-1 list-disc list-inside">
+                                    <li>Take GRE / IELTS if targeting top US/EU universities.</li>
+                                    <li>Finalize statement of purpose (SOP) highlighting zoological conservation and research.</li>
+                                    <li>Submit applications for Erasmus Mundus and Commonwealth scholarships.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (currentTab === 'applications') {
+                html = `
+                    <div class="space-y-6">
+                        <div class="bg-editorial-100 border border-editorial-200 rounded-2xl p-6 shadow-sm">
+                            <h2 class="font-serif text-2xl font-bold text-editorial-900 mb-2">Application Pipeline Tracker</h2>
+                            <p class="text-xs text-editorial-700">Track your candidacy stages from bookmarking to acceptance.</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                            ${['Bookmark', 'Applied', 'Shortlisted', 'Accepted'].map(status => `
+                                <div class="bg-editorial-100 border border-editorial-200 rounded-xl p-4 flex flex-col">
+                                    <h4 class="font-bold text-xs text-editorial-900 uppercase tracking-wider mb-3 pb-2 border-b border-editorial-200">${status} (${opportunities.filter(o=>o.status===status).length})</h4>
+                                    <div class="space-y-2 flex-1">
+                                        ${opportunities.filter(o=>o.status === status).map(o => `
+                                            <div onclick="openDetail(${o.id})" class="p-3 bg-editorial-50 border border-editorial-200 rounded-lg text-xs hover:border-editorial-400 cursor-pointer">
+                                                <p class="font-bold text-editorial-900 truncate">${o.name}</p>
+                                                <p class="text-[10px] text-editorial-600 mt-1">${o.deadline}</p>
+                                            </div>
+                                        `).join('') || '<p class="text-[11px] text-editorial-500 italic">No items</p>'}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            } else if (currentTab === 'calendar') {
+                html = `
+                    <div class="space-y-6">
+                        <div class="bg-editorial-100 border border-editorial-200 rounded-2xl p-6 shadow-sm">
+                            <h2 class="font-serif text-2xl font-bold text-editorial-900 mb-2">Deadline Calendar</h2>
+                            <p class="text-xs text-editorial-700">Chronological timeline of all active opportunity deadlines.</p>
+                        </div>
+                        <div class="bg-editorial-100 border border-editorial-200 rounded-2xl p-6 space-y-3">
+                            ${[...opportunities].sort((a,b)=>new Date(a.deadline)-new Date(b.deadline)).map(o=>`
+                                <div onclick="openDetail(${o.id})" class="p-4 bg-editorial-50 border border-editorial-200 rounded-xl flex items-center justify-between cursor-pointer hover:border-editorial-400">
+                                    <div>
+                                        <span class="text-[10px] font-bold bg-editorial-200 px-2 py-0.5 rounded text-editorial-800">${o.category}</span>
+                                        <h4 class="font-bold text-xs text-editorial-900 mt-1">${o.name}</h4>
+                                        <p class="text-[10px] text-editorial-600">${o.institution}</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="text-xs font-bold text-blush-800">${o.deadline}</span>
+                                        <p class="text-[10px] text-editorial-500">${o.funding}</p>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            } else if (currentTab === 'cvbuilder') {
+                html = `
+                    <div class="space-y-6">
+                        <div class="bg-editorial-100 border border-editorial-200 rounded-2xl p-6 shadow-sm">
+                            <h2 class="font-serif text-2xl font-bold text-editorial-900 mb-2">CV & Gap Analyser</h2>
+                            <p class="text-xs text-editorial-700">Evaluate your profile against top global fellowship requirements.</p>
+                        </div>
+                        <div class="bg-editorial-100 border border-editorial-200 rounded-2xl p-6 space-y-4">
+                            <h3 class="font-serif text-lg font-bold text-editorial-900">Profile Readiness Score: 82 / 100</h3>
+                            <div class="w-full bg-editorial-200 rounded-full h-2.5">
+                                <div class="bg-editorial-900 h-2.5 rounded-full" style="width: 82%"></div>
+                            </div>
+                            <div class="space-y-2 text-xs text-editorial-700 pt-2">
+                                <p><i class="fa-solid fa-check text-emerald-700 mr-2"></i> Strong academic standing (CGPA 8.3)</p>
+                                <p><i class="fa-solid fa-check text-emerald-700 mr-2"></i> Active participation in national elocution & essay contests</p>
+                                <p><i class="fa-solid fa-triangle-exclamation text-amber-700 mr-2"></i> Recommendation letters pending formal academic faculty requests</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (currentTab === 'aiassistant') {
+                html = `
+                    <div class="space-y-6">
+                        <div class="bg-editorial-100 border border-editorial-200 rounded-2xl p-6 shadow-sm">
+                            <h2 class="font-serif text-2xl font-bold text-editorial-900 mb-2">AI Strategy Advisor</h2>
+                            <p class="text-xs text-editorial-700">Get tailored advice on fellowship essays and interview preparation.</p>
+                        </div>
+                        <div class="bg-editorial-100 border border-editorial-200 rounded-2xl p-6 space-y-4">
+                            <div class="p-4 bg-editorial-50 border border-editorial-200 rounded-xl text-xs text-editorial-800">
+                                <p class="font-bold mb-1"><i class="fa-solid fa-wand-magic-sparkles text-mauve-700 mr-1.5"></i> Advisor Tip for BSc Zoology:</p>
+                                When applying for research fellowships like Khorana or DAAD, emphasize your curiosity in ecological fieldwork and laboratory conservation techniques rather than just coursework grades.
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            mobileArea.innerHTML = html;
+            desktopArea.innerHTML = html;
+        }
+
+        function renderOpportunityCards(list) {
+            if(list.length === 0) return `<div class="col-span-full p-8 text-center text-xs text-editorial-600">No matching opportunities found.</div>`;
+            return list.map(o => `
+                <div class="bg-editorial-100 border border-editorial-200 rounded-2xl p-5 hover:border-editorial-400 transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                            <span class="text-[10px] font-bold bg-editorial-200 text-editorial-800 px-2.5 py-0.5 rounded-full">${o.category}</span>
+                            <span class="text-[10px] font-semibold bg-blush-200 text-blush-900 px-2 py-0.5 rounded">${o.funding}</span>
+                        </div>
+                        <h3 onclick="openDetail(${o.id})" class="font-serif text-lg font-bold text-editorial-900 cursor-pointer hover:underline">${o.name}</h3>
+                        <p class="text-xs text-editorial-600 mt-0.5">${o.institution}</p>
+                        <p class="text-xs text-editorial-700 mt-2 line-clamp-2">${o.desc}</p>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-editorial-200 flex items-center justify-between text-xs">
+                        <span class="text-[11px] font-semibold text-editorial-600"><i class="fa-regular fa-clock mr-1"></i> ${o.deadline}</span>
+                        <div class="flex items-center gap-2">
+                            <button onclick="toggleBookmark(${o.id})" class="w-8 h-8 rounded-lg bg-editorial-200 text-editorial-800 flex items-center justify-center cursor-pointer hover:bg-editorial-300">
+                                <i class="fa-${o.bookmark ? 'solid' : 'regular'} fa-bookmark text-xs"></i>
+                            </button>
+                            <a href="${o.url}" target="_blank" class="px-3 py-1.5 bg-editorial-900 text-editorial-50 rounded-lg text-xs font-semibold hover:bg-editorial-800">Apply →</a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterOpportunities() {
+            const query = document.getElementById('search-input')?.value.toLowerCase() || '';
+            const cat = document.getElementById('category-filter')?.value || 'all';
+            const filtered = opportunities.filter(o => {
+                const matchQ = o.name.toLowerCase().includes(query) || o.institution.toLowerCase().includes(query) || o.desc.toLowerCase().includes(query);
+                const matchC = cat === 'all' || o.category === cat;
+                return matchQ && matchC;
+            });
+            const grid = document.getElementById('opportunity-grid');
+            if(grid) grid.innerHTML = renderOpportunityCards(filtered);
+        }
+
+        function openDetail(id) {
+            const o = opportunities.find(item => item.id === id);
+            if(!o) return;
+            const inner = document.getElementById('modal-content-inner');
+            inner.innerHTML = `
+                <span class="text-[10px] font-bold bg-editorial-200 text-editorial-800 px-2.5 py-0.5 rounded-full">${o.category}</span>
+                <h2 class="font-serif text-2xl font-bold text-editorial-900 mt-2">${o.name}</h2>
+                <p class="text-xs text-editorial-600 font-semibold mt-0.5">${o.institution}</p>
+                
+                <div class="my-4 p-4 bg-editorial-100 border border-editorial-200 rounded-xl space-y-2 text-xs text-editorial-700">
+                    <p><strong>Funding:</strong> ${o.funding}</p>
+                    <p><strong>Deadline:</strong> ${o.deadline}</p>
+                    <p><strong>Eligibility:</strong> ${o.eligibility}</p>
+                    <p><strong>Notes:</strong> ${o.notes}</p>
+                </div>
+
+                <p class="text-xs text-editorial-800 leading-relaxed">${o.desc}</p>
+
+                <div class="mt-6 flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-editorial-200">
+                    <div class="flex items-center gap-2">
+                        <label class="text-xs font-bold text-editorial-700 uppercase">Status:</label>
+                        <select onchange="updateStatus(${o.id}, this.value)" class="bg-editorial-100 border border-editorial-300 rounded-lg px-3 py-1 text-xs text-editorial-900">
+                            ${['Bookmark', 'Applied', 'Shortlisted', 'Accepted'].map(s => `<option value="${s}" ${o.status===s?'selected':''}>${s}</option>`).join('')}
+                        </select>
+                    </div>
+                    <a href="${o.url}" target="_blank" class="px-4 py-2 bg-editorial-900 text-editorial-50 rounded-lg text-xs font-semibold hover:bg-editorial-800">Visit Official Portal →</a>
+                </div>
+            `;
+            document.getElementById('detail-modal').classList.remove('hidden');
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detail-modal').classList.add('hidden');
+        }
+
+        function openAddModal() {
+            document.getElementById('add-modal').classList.remove('hidden');
+        }
+
+        function closeAddModal() {
+            document.getElementById('add-modal').classList.add('hidden');
+        }
+
+        function handleAddNewOpportunity(e) {
+            e.preventDefault();
+            const newOpp = {
+                id: Date.now(),
+                name: document.getElementById('add-name').value,
+                institution: document.getElementById('add-institution').value,
+                category: document.getElementById('add-category').value,
+                funding: document.getElementById('add-funding').value,
+                deadline: document.getElementById('add-deadline').value,
+                url: document.getElementById('add-url').value,
+                desc: document.getElementById('add-desc').value || 'Custom added opportunity.',
+                eligibility: 'Open for applications',
+                notes: 'Added via mobile command center.',
+                status: 'Bookmark',
+                bookmark: true,
+                niche: document.getElementById('add-category').value.includes('Public Speaking') || document.getElementById('add-category').value.includes('Writing')
+            };
+            opportunities.unshift(newOpp);
+            saveData();
+            closeAddModal();
+            renderContent();
+            showToast('Opportunity added successfully!');
+            document.getElementById('add-opportunity-form').reset();
+        }
+
+        function updateStatus(id, newStatus) {
+            const o = opportunities.find(item => item.id === id);
+            if(o) {
+                o.status = newStatus;
+                saveData();
+                showToast(`Status updated to ${newStatus}`);
+            }
+        }
+
+        function toggleBookmark(id) {
+            const o = opportunities.find(item => item.id === id);
+            if(o) {
+                o.bookmark = !o.bookmark;
+                saveData();
+                renderContent();
+            }
+        }
+
+        function toggleTheme() {
+            showToast('Classic Editorial theme active.');
+        }
+
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(opportunities, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "opportunity_os_backup.json");
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+            showToast('Database exported successfully!');
+        }
+
+        function showToast(msg) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'bg-editorial-900 text-editorial-50 px-4 py-2 rounded-xl text-xs shadow-lg animate-fade-in pointer-events-auto';
+            toast.textContent = msg;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // Initial render
+        renderContent();
+    </script>
+</body>
+</html>
